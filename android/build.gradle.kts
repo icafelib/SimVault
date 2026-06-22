@@ -1,8 +1,10 @@
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+    val newSubprojectBuildDir: Directory =
+        rootProject.layout.buildDirectory
+            .dir("../../build")
+            .get()
+            .dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 
 val newBuildDir: Directory =
@@ -11,10 +13,6 @@ val newBuildDir: Directory =
         .get()
 rootProject.layout.buildDirectory.value(newBuildDir)
 
-subprojects {
-    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
-    project.layout.buildDirectory.value(newSubprojectBuildDir)
-}
 subprojects {
     project.evaluationDependsOn(":app")
 }

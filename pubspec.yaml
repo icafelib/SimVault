@@ -20,7 +20,6 @@ dependencies:
 
   # Database (Drift + SQLCipher)
   drift: ^2.20.3
-  sqlite3_flutter_libs: ^0.5.24
   sqlcipher_flutter_libs: ^0.6.4
   path_provider: ^2.1.4
   path: ^1.9.0
@@ -31,7 +30,7 @@ dependencies:
 
   # Notifications & background
   flutter_local_notifications: ^17.2.3
-  workmanager: ^0.5.2
+  workmanager: ^0.9.0+3
   timezone: ^0.9.4
 
   # UI
@@ -40,7 +39,7 @@ dependencies:
 
   # Utility
   csv: ^6.0.0
-  share_plus: ^10.0.2
+  share_plus: ^10.1.4
   uuid: ^4.5.1
   collection: ^1.18.0
 
