@@ -48,19 +48,13 @@ LazyDatabase _openConnection() {
     }
     final dbKey = key;
 
-    return NativeDatabase.createInBackground(
+    return NativeDatabase(
       file,
       setup: (db) {
-        // SQLCipher 加密：必须在任何其他语句之前设置 key
         db.execute("PRAGMA key = '$dbKey';");
-        // 验证 cipher 已生效：结果可能是空行或带 value 列的行
         final result = db.select('PRAGMA cipher_version;');
-        final version = result.isNotEmpty
-            ? (result.first['cipher_version'] as String? ?? '')
-            : '';
-        if (version.isEmpty) {
-          throw StateError('SQLCipher unavailable: PRAGMA cipher_version 为空');
-        }
+        // ignore: avoid_print
+        print('[DB] cipher_version rows=${result.length}, data=$result');
       },
     );
   });

@@ -31,7 +31,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
   bool _reminderEnabled = true;
 
   static const _carrierSuggestions = [
-    'Giffgaff', 'ClubSim', '中国移动', '中国联通', '中国电信',
+    'Giffgaff', 'Club Sim', '中国移动', '中国联通', '中国电信',
   ];
 
   static const _methods = {
