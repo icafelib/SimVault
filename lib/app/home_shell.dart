@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 import '../features/numbers/numbers_page.dart';
+import '../features/discover/discover_page.dart';
+import '../features/profile/profile_page.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -15,9 +17,8 @@ class _HomeShellState extends State<HomeShell> {
 
   static const _pages = <Widget>[
     NumbersPage(),
-    _PlaceholderTab(title: '套餐'),
-    _PlaceholderTab(title: '提醒'),
-    _PlaceholderTab(title: '资产'),
+    DiscoverPage(),
+    ProfilePage(),
   ];
 
   @override
@@ -33,37 +34,14 @@ class _HomeShellState extends State<HomeShell> {
               selectedIcon: Icon(Icons.sim_card, color: AppColors.primary),
               label: '号码'),
           NavigationDestination(
-              icon: Icon(Icons.receipt_long_outlined),
-              selectedIcon:
-                  Icon(Icons.receipt_long, color: AppColors.primary),
-              label: '套餐'),
+              icon: Icon(Icons.explore_outlined),
+              selectedIcon: Icon(Icons.explore, color: AppColors.primary),
+              label: '发现'),
           NavigationDestination(
-              icon: Icon(Icons.notifications_outlined),
-              selectedIcon:
-                  Icon(Icons.notifications, color: AppColors.primary),
-              label: '提醒'),
-          NavigationDestination(
-              icon: Icon(Icons.account_balance_wallet_outlined),
-              selectedIcon: Icon(Icons.account_balance_wallet,
-                  color: AppColors.primary),
-              label: '资产'),
+              icon: Icon(Icons.person_outline),
+              selectedIcon: Icon(Icons.person, color: AppColors.primary),
+              label: '我的'),
         ],
-      ),
-    );
-  }
-}
-
-class _PlaceholderTab extends StatelessWidget {
-  const _PlaceholderTab({required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text('$title 模块即将上线',
-            style: const TextStyle(color: AppColors.secondary)),
       ),
     );
   }

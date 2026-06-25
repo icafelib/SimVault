@@ -30,6 +30,11 @@ class PhoneNumberRepository {
     String? iccid,
     String? note,
     DateTime? joinedAt,
+    // keep-alive fields
+    DateTime? lastActiveAt,
+    int keepAlivePeriodDays = 180,
+    DateTime? nextRemindAt,
+    String? keepAliveMethod, // ruleType: sms / recharge / balance / data / other
   }) async {
     final id = _uuid.v4();
     final now = DateTime.now();
@@ -45,6 +50,20 @@ class PhoneNumberRepository {
             joinedAt: Value(joinedAt),
             createdAt: Value(now),
             updatedAt: Value(now),
+          ),
+        );
+    // Insert keep-alive rule if provided
+    final effectiveLastActive = lastActiveAt ?? now;
+    final effectiveNext = nextRemindAt ??
+        effectiveLastActive.add(Duration(days: keepAlivePeriodDays));
+    await _db.into(_db.keepAliveRules).insert(
+          KeepAliveRulesCompanion.insert(
+            id: _uuid.v4(),
+            phoneId: id,
+            ruleType: keepAliveMethod ?? 'other',
+            periodDays: keepAlivePeriodDays,
+            lastActiveAt: Value(effectiveLastActive),
+            nextRemindAt: Value(effectiveNext),
           ),
         );
     return id;

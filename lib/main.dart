@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,8 +7,11 @@ import 'app/home_shell.dart';
 import 'core/theme/app_theme.dart';
 import 'features/numbers/new_phone_page.dart';
 import 'features/numbers/phone_detail_page.dart';
+// discover and profile are loaded transitively via home_shell.dart
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(const ProviderScope(child: SimVaultApp()));
 }
 
