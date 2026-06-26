@@ -5,6 +5,7 @@ import '../../core/providers.dart';
 import '../../core/theme/app_colors.dart';
 import 'widgets/phone_card.dart';
 
+/// 号码首页，展示所有已添加的号码列表
 class NumbersPage extends ConsumerWidget {
   const NumbersPage({super.key});
 

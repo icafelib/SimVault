@@ -1,9 +1,68 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../core/theme/app_colors.dart';
 import 'carrier_detail_page.dart';
 
-class DiscoverPage extends StatelessWidget {
+const _kCacheKey = 'carrier_list_cache';
+const _kApiUrl = 'https://simvalut.xiaoheicamp.com/querycarrier?type=all';
+
+/// 发现页，展示运营商列表，切换到本页时后台拉取最新数据
+class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
+
+  @override
+  State<DiscoverPage> createState() => _DiscoverPageState();
+}
+
+class _DiscoverPageState extends State<DiscoverPage> {
+  late List<CarrierInfo> _carriers;
+
+  @override
+  void initState() {
+    super.initState();
+    _carriers = List.of(kCarriers);
+    _loadCacheAndFetch();
+  }
+
+  Future<void> _loadCacheAndFetch() async {
+    final prefs = await SharedPreferences.getInstance();
+    final cached = prefs.getString(_kCacheKey);
+    if (cached != null) {
+      final list = CarrierInfo.decodeList(cached);
+      if (list.isNotEmpty && mounted) {
+        setState(() {
+          _carriers = list;
+          kCarriers = list;
+        });
+      }
+    }
+    // 后台请求最新数据
+    try {
+      final resp = await http.get(Uri.parse(_kApiUrl));
+      if (resp.statusCode == 200) {
+        final body = jsonDecode(resp.body) as Map<String, dynamic>;
+        final raw = body['carrier_list'];
+        if (raw is List && raw.isNotEmpty) {
+          final list = raw
+              .map((e) => CarrierInfo.fromJson(e as Map<String, dynamic>))
+              .toList();
+          await prefs.setString(_kCacheKey, CarrierInfo.encodeList(list));
+          if (mounted) {
+            setState(() {
+              _carriers = list;
+              kCarriers = list;
+            });
+          }
+        }
+      }
+    } catch (_) {
+      // 请求失败不做任何处理
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +77,7 @@ class DiscoverPage extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: AppColors.title)),
           const SizedBox(height: 12),
-          ...kCarriers.map((c) => _CarrierCard(carrier: c)),
+          ..._carriers.map((c) => _CarrierCard(carrier: c)),
         ],
       ),
     );

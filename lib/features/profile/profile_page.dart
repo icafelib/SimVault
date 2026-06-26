@@ -3,6 +3,7 @@ import '../../core/theme/app_colors.dart';
 import 'feedback_page.dart';
 import 'notification_settings_page.dart';
 
+/// 我的页面，提供提醒设置、帮助、反馈和关于入口
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 

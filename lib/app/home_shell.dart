@@ -5,6 +5,7 @@ import '../features/numbers/numbers_page.dart';
 import '../features/discover/discover_page.dart';
 import '../features/profile/profile_page.dart';
 
+/// 应用主框架，包含底部导航栏和三个一级页面（号码、发现、我的）
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 

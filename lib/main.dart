@@ -15,6 +15,7 @@ void main() async {
   runApp(const ProviderScope(child: SimVaultApp()));
 }
 
+/// 应用根 Widget，配置主题、路由和国际化
 class SimVaultApp extends StatelessWidget {
   const SimVaultApp({super.key});
 

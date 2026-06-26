@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+/// 手机号码主表
 class PhoneNumbers extends Table {
   TextColumn get id => text()();
   TextColumn get number => text()();
@@ -19,6 +20,7 @@ class PhoneNumbers extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// 套餐记录表，关联 [PhoneNumbers]，号码删除时级联删除
 class Plans extends Table {
   TextColumn get id => text()();
   TextColumn get phoneId =>
@@ -35,6 +37,7 @@ class Plans extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// 保号规则表，存储每张号码的保号周期和提醒时间
 class KeepAliveRules extends Table {
   TextColumn get id => text()();
   TextColumn get phoneId =>
@@ -49,6 +52,7 @@ class KeepAliveRules extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// 操作记录表，记录充值、通话、短信、流量等活动
 class Activities extends Table {
   TextColumn get id => text()();
   TextColumn get phoneId =>
@@ -62,6 +66,7 @@ class Activities extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// 资产估值表，记录号码的市场价值和年成本
 class Assets extends Table {
   TextColumn get id => text()();
   TextColumn get phoneId =>
@@ -76,6 +81,7 @@ class Assets extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// 虚拟运营商（MVNO）信息表
 class Mvnos extends Table {
   TextColumn get id => text()();
   TextColumn get brand => text()();

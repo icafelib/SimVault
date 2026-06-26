@@ -8,9 +8,9 @@ import '../discover/carrier_detail_page.dart';
 import '../profile/feedback_page.dart';
 import '../profile/notification_settings_page.dart';
 
+/// 添加号码页面
 class NewPhonePage extends ConsumerStatefulWidget {
   const NewPhonePage({super.key});
-
   @override
   ConsumerState<NewPhonePage> createState() => _NewPhonePageState();
 }
@@ -54,6 +54,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
     });
   }
 
+  /// 根据保号周期重新计算下次保号日期
   void _recalcNext() {
     final days = int.tryParse(_periodCtrl.text.trim()) ?? 0;
     final next = _lastActiveAt.add(Duration(days: days));
@@ -71,6 +72,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
     super.dispose();
   }
 
+  /// 返回当前输入的运营商名对应的已知运营商信息，未匹配则返回 null
   CarrierInfo? get _knownCarrier {
     try {
       return kCarriers.firstWhere(
@@ -80,6 +82,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
     }
   }
 
+  /// 弹出日期选择器，[isLast] 为 true 时修改最近保号日期，否则修改下次保号日期
   Future<void> _pickDate({required bool isLast}) async {
     final initial = isLast ? _lastActiveAt : _nextRemindAt;
     final picked = await showDatePicker(
@@ -100,6 +103,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
     });
   }
 
+  /// 校验表单并将号码数据持久化到数据库
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
@@ -141,6 +145,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
     }
   }
 
+  /// 从下拉建议列表中选中运营商，并关闭下拉面板
   void _selectCarrier(String value) {
     setState(() {
       _carrierCtrl.text = value;
@@ -215,7 +220,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.border),
                       borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
+                      color: AppColors.primary.withOpacity(0.06),
                       boxShadow: const [AppColors.cardShadow],
                     ),
                     child: Column(
@@ -274,12 +279,6 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
               controller: _numberCtrl,
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(labelText: '手机号码（选填）'),
-              validator: (v) {
-                final s = (v ?? '').trim();
-                if (s.isEmpty || s == '+') return null;
-                if (!RegExp(r'^\+?\d{6,15}$').hasMatch(s)) return '号码格式不正确';
-                return null;
-              },
             ),
             const SizedBox(height: 12),
             // 最近保号日期
@@ -386,6 +385,7 @@ class _NewPhonePageState extends ConsumerState<NewPhonePage> {
   }
 }
 
+/// 日期选择字段，点击后弹出日期选择器
 class _DateField extends StatelessWidget {
   final String label;
   final DateTime date;

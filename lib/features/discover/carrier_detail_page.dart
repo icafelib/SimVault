@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
+/// 运营商信息数据模型
 class CarrierInfo {
   final String name;
   final String logo;
@@ -23,9 +26,41 @@ class CarrierInfo {
     required this.disadvantages,
     this.keepAliveRule,
   });
+
+  factory CarrierInfo.fromJson(Map<String, dynamic> j) => CarrierInfo(
+        name: j['name'] as String,
+        logo: j['logo'] as String,
+        country: j['country'] as String,
+        network: j['network'] as String,
+        website: j['website'] as String,
+        description: j['description'] as String,
+        advantages: List<String>.from(j['advantages'] as List),
+        disadvantages: List<String>.from(j['disadvantages'] as List),
+        keepAliveRule: j['keepAliveRule'] as String?,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'logo': logo,
+        'country': country,
+        'network': network,
+        'website': website,
+        'description': description,
+        'advantages': advantages,
+        'disadvantages': disadvantages,
+        'keepAliveRule': keepAliveRule,
+      };
+
+  /// 将列表序列化为 JSON 字符串
+  static String encodeList(List<CarrierInfo> list) =>
+      jsonEncode(list.map((c) => c.toJson()).toList());
+
+  /// 从 JSON 字符串反序列化列表
+  static List<CarrierInfo> decodeList(String raw) =>
+      (jsonDecode(raw) as List).map((e) => CarrierInfo.fromJson(e as Map<String, dynamic>)).toList();
 }
 
-const kCarriers = [
+const kDefaultCarriers = [
   CarrierInfo(
     name: 'Giffgaff',
     logo: '🇬🇧',
@@ -50,6 +85,10 @@ const kCarriers = [
   ),
 ];
 
+/// 供其他页面使用的全局运营商列表（运行时可被远程数据覆盖）
+List<CarrierInfo> kCarriers = List.of(kDefaultCarriers);
+
+/// 运营商详情页，展示运营商优缺点、保号规则等信息
 class CarrierDetailPage extends StatelessWidget {
   final CarrierInfo carrier;
   const CarrierDetailPage({super.key, required this.carrier});
